@@ -1,0 +1,75 @@
+# This is the OpenAPI specification file.
+# It defines the API's endpoints, operations, and data models.
+
+# The version of the OpenAPI specification.
+openapi: 3.0.1
+info:
+  # The title of the API.
+  title: Microsoft Secure Score API
+  # The version of the API.
+  version: v1.0
+  # A description of the API's purpose for the AI model. This is critical for Copilot.
+  description: API for retrieving Microsoft Secure Score and control profiles from the Microsoft Graph API. It provides a way to fetch the latest secure score, historical secure scores, and a list of all secure score controls.
+servers:
+  # The base URL for all API requests.
+  - url: https://graph.microsoft.com/v1.0
+paths:
+  /security/secureScores:
+    get:
+      # A unique identifier for this API operation.
+      operationId: getSecureScores
+      # A description of what this specific operation does.
+      description: Retrieves a collection of all Microsoft Secure Scores for the organization. This includes the current score and a history of past scores.
+      # Define the parameters for the request. In this case, there are none for a basic GET.
+      parameters: []
+      # Define the possible responses from the API.
+      responses:
+        '200':
+          description: A successful response containing an array of secure score objects.
+          content:
+            application/json:
+              schema:
+                type: object
+                # A brief, human-readable summary of the response's contents.
+                summary: A collection of Secure Score data.
+                properties:
+                  # The value property contains the array of secure score objects.
+                  value:
+                    type: array
+                    items:
+                      # Define the structure of a single secureScore object.
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier for the secure score object.
+                        azureTenantId:
+                          type: string
+                          description: The GUID for the tenant ID.
+                        currentScore:
+                          type: number
+                          description: The current attained score for the tenant.
+                        maxScore:
+                          type: number
+                          description: The maximum possible score for the tenant.
+                        createdDateTime:
+                          type: string
+                          format: date-time
+                          description: The date and time the secure score data was created.
+                        # You can add more properties from the secureScore resource type
+                        # as needed, such as controlScores, enabledServices, etc.
+                        # Refer to the official Microsoft Graph documentation for the full schema.
+        default:
+          description: An unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
