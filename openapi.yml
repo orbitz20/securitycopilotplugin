@@ -1,63 +1,87 @@
 openapi: 3.0.1
 info:
-  title: Microsoft Secure Score API
+  title: Microsoft Secure Score Plugin API
+  description: Access Microsoft Secure Score data and recommendations via Microsoft Graph.
   version: 1.0.0
-  description: API for retrieving Microsoft Secure Score and control profiles from Microsoft Graph API. It provides the latest secure score, historical scores, and control profiles.
-
 servers:
   - url: https://graph.microsoft.com/v1.0
-
 paths:
   /security/secureScores:
     get:
-      operationId: getSecureScores
-      summary: Retrieve all Microsoft Secure Scores
-      description: Retrieves current and historical Microsoft Secure Scores for the organization.
-      parameters: []
+      summary: Get current Secure Score
+      operationId: getSecureScore
+      tags:
+        - SecureScore
       responses:
         '200':
-          description: A successful response with an array of secure score objects.
+          description: Secure Score data retrieved successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  value:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/SecureScore'
-        default:
-          description: Unexpected error
+                $ref: '#/components/schemas/SecureScore'
+  /security/secureScoreControlProfiles:
+    get:
+      summary: Get Secure Score recommendations
+      operationId: getRecommendations
+      tags:
+        - Recommendations
+      responses:
+        '200':
+          description: Recommendations retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                $ref: '#/components/schemas/RecommendationList'
 components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
+          scopes:
+            https://graph.microsoft.com/.default: Access Microsoft Graph Secure Score data
   schemas:
     SecureScore:
       type: object
       properties:
         id:
           type: string
-          description: Unique ID of the secure score object.
-        azureTenantId:
-          type: string
         currentScore:
           type: number
+          format: float
         maxScore:
           type: number
+          format: float
+        enabledServices:
+          type: array
+          items:
+            type: string
+        averageScore:
+          type: number
+          format: float
         createdDateTime:
           type: string
           format: date-time
-
-    ErrorResponse:
+    RecommendationList:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
+        value:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              actionType:
+                type: string
+              title:
+                type: string
+              implementationCost:
+                type: string
+              remediationImpact:
+                type: string
+              scoreImpact:
+                type: number
+security:
+  - OAuth2: []
