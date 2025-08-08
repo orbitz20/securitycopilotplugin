@@ -7,7 +7,7 @@ info:
   # The title of the API.
   title: Microsoft Secure Score API
   # The version of the API.
-  version: v1.0
+  version: 1.0.0
   # A description of the API's purpose for the AI model. This is critical for Copilot.
   description: API for retrieving Microsoft Secure Score and control profiles from the Microsoft Graph API. It provides a way to fetch the latest secure score, historical secure scores, and a list of all secure score controls.
 servers:
@@ -73,3 +73,4 @@ paths:
                         type: string
                       message:
                         type: string
+
