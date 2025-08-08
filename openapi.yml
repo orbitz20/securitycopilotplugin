@@ -38,7 +38,7 @@ components:
       type: oauth2
       flows:
         clientCredentials:
-          tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
+          tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
           scopes:
             https://graph.microsoft.com/.default: Access Microsoft Graph Secure Score data
   schemas:
@@ -85,3 +85,4 @@ components:
                 type: number
 security:
   - OAuth2: []
+
