@@ -34,8 +34,8 @@ components:
       description: "Microsoft Entra ID Delegated Access"
       flows:
         implicit:
-          authorizationUrl: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
-          tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
+          authorizationUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
           scopes:
             SecurityEvents.Read.All: "Read all security events."
   schemas:
@@ -79,4 +79,5 @@ components:
           type: string
         rank:
           type: number
+
 
