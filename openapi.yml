@@ -1,88 +1,81 @@
 openapi: 3.0.1
 info:
-  title: Microsoft Secure Score Plugin API
-  description: Access Microsoft Secure Score data and recommendations via Microsoft Graph.
+  title: Entra Secure Score API
   version: 1.0.0
+  description: API to retrieve the Entra Secure Score from the Microsoft Graph API.
 servers:
   - url: https://graph.microsoft.com/v1.0
 paths:
   /security/secureScores:
     get:
-      summary: Get current Secure Score
+      summary: Get the current Entra Secure Score
       operationId: getSecureScore
-      tags:
-        - SecureScore
+      description: Retrieves the secure score information for your tenant.
+      security:
+        - AADDelegatedAuth:
+          - SecurityEvents.Read.All
       responses:
-        '200':
-          description: Secure Score data retrieved successfully
+        "200":
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SecureScore'
-  /security/secureScoreControlProfiles:
-    get:
-      summary: Get Secure Score recommendations
-      operationId: getRecommendations
-      tags:
-        - Recommendations
-      responses:
-        '200':
-          description: Recommendations retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RecommendationList'
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/secureScore'
+      x-ms-capabilities: {}
 components:
   securitySchemes:
-    OAuth2:
+    AADDelegatedAuth:
       type: oauth2
+      description: "Microsoft Entra ID Delegated Access"
       flows:
-        clientCredentials:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/authorize
           tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
           scopes:
-            https://graph.microsoft.com/.default: Access Microsoft Graph Secure Score data
+            SecurityEvents.Read.All: "Read all security events."
   schemas:
-    SecureScore:
+    secureScore:
       type: object
       properties:
         id:
           type: string
+        azureTenantId:
+          type: string
+        activeUsers:
+          type: number
         currentScore:
           type: number
-          format: float
         maxScore:
           type: number
-          format: float
-        enabledServices:
-          type: array
-          items:
-            type: string
-        averageScore:
+        scoreInPercentage:
           type: number
-          format: float
         createdDateTime:
           type: string
           format: date-time
-    RecommendationList:
-      type: object
-      properties:
-        value:
+        lastUpdatedDateTime:
+          type: string
+          format: date-time
+        controlScores:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-              actionType:
-                type: string
-              title:
-                type: string
-              implementationCost:
-                type: string
-              remediationImpact:
-                type: string
-              scoreImpact:
-                type: number
-security:
-  - OAuth2: []
-
+            $ref: '#/components/schemas/secureScoreControlProfile'
+    secureScoreControlProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        actionType:
+          type: string
+        controlCategory:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        rank:
+          type: number
