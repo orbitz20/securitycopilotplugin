@@ -1,19 +1,32 @@
 openapi: 3.0.1
 info:
-  title: Entra Secure Score API
+  title: Entra Tenant Secure Score API
   version: 1.0.0
-  description: API to retrieve the Entra Secure Score from the Microsoft Graph API.
+  description: API to retrieve the historical tenant secure scores from the Microsoft Graph beta API.
 servers:
-  - url: https://graph.microsoft.com/v1.0
+  - url: https://graph.microsoft.com/beta
 paths:
-  /security/secureScores:
+  /directory/recommendations/tenantSecureScores:
     get:
-      summary: Get the current Entra Secure Score
-      operationId: getSecureScore
-      description: Retrieves the secure score information for your tenant.
+      summary: Get the historical Entra Tenant Secure Score
+      operationId: getTenantSecureScores
+      description: Retrieves the historical tenant secure scores for your tenant.
+      parameters:
+        - name: $count
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: To get the total count of items in the collection.
+        - name: $top
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: The number of items to return in the collection.
       security:
         - AADDelegatedAuth:
-          - SecurityEvents.Read.All
+          - DirectoryRecommendations.Read.All
       responses:
         "200":
           description: OK
@@ -25,7 +38,7 @@ paths:
                   value:
                     type: array
                     items:
-                      $ref: '#/components/schemas/secureScore'
+                      $ref: '#/components/schemas/tenantSecureScore'
       x-ms-capabilities: {}
 components:
   securitySchemes:
@@ -34,50 +47,18 @@ components:
       description: "Microsoft Entra ID Delegated Access"
       flows:
         implicit:
-          authorizationUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/authorize
-          tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/common/oauth2/v2.0/token
           scopes:
-            SecurityEvents.Read.All: "Read all security events."
+            DirectoryRecommendations.Read.All: "Read all Entra directory recommendations."
   schemas:
-    secureScore:
+    tenantSecureScore:
       type: object
       properties:
-        id:
-          type: string
-        azureTenantId:
-          type: string
-        activeUsers:
+        tenantScore:
           type: number
-        currentScore:
+        tenantMaxScore:
           type: number
-        maxScore:
-          type: number
-        scoreInPercentage:
-          type: number
-        createdDateTime:
+        createDateTime:
           type: string
           format: date-time
-        lastUpdatedDateTime:
-          type: string
-          format: date-time
-        controlScores:
-          type: array
-          items:
-            $ref: '#/components/schemas/secureScoreControlProfile'
-    secureScoreControlProfile:
-      type: object
-      properties:
-        id:
-          type: string
-        actionType:
-          type: string
-        controlCategory:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        rank:
-          type: number
-
-
