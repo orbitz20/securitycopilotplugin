@@ -47,21 +47,10 @@ components:
         maxScore:
           type: number
           description: The maximum possible score on the specified date.
-        controlScores:
+        # This is a simplified representation to adhere to the depth of 1 constraint.
+        # It's no longer a nested array of objects.
+        controlScores_flattened:
           type: array
-          description: Contains a collection of scores for a set of security controls.
+          description: Simplified scores for a set of security controls (string representation).
           items:
-            type: object
-            properties:
-              controlCategory:
-                type: string
-                description: The category of the security control (e.g., 'Identity', 'Data').
-              score:
-                type: number
-                description: The score for the specific control.
-              scoreInPercentage:
-                type: number
-                description: The score as a percentage.
-      externalDocs:
-        description: Microsoft Graph secureScore resource type
-        url: https://learn.microsoft.com/en-us/graph/api/resources/securescore?view=graph-rest-1.0
+            type: string
