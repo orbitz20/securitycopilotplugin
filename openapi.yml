@@ -13,7 +13,7 @@ paths:
       description: Retrieves the secure score information for your tenant.
       security:
         - AADDelegatedAuth:
-            - AADDelegated
+            - SecurityScore.Read.All
       responses:
         "200":
           description: OK
@@ -51,4 +51,5 @@ components:
           tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
           scopes:
             SecurityEvents.Read.All: "Read all security events."
+
 
