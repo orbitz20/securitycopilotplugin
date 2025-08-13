@@ -71,8 +71,6 @@ components:
           type: string
           format: date-time
           description: The time the score was last updated.
-        # This is the flattened representation to adhere to the depth of 1 constraint.
-        # The nested object `secureScoreControlProfile` has been removed.
         controlScores_flattened:
           type: array
           description: A simplified list of security control scores (e.g., 'Category: Title - Score').
