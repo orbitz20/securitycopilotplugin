@@ -2,13 +2,13 @@ openapi: 3.0.1
 info:
   title: Entra Secure Score API
   version: 1.0.0
-  description: API to retrieve the Entra Secure Score from the Microsoft Graph API.
+  description: A very simple API to get the current Entra Secure Score.
 servers:
   - url: https://graph.microsoft.com/v1.0
 paths:
   /security/secureScores:
     get:
-      summary: Get the current Entra Secure Score
+      summary: Get Entra Secure Score
       operationId: getSecureScore
       description: Retrieves the secure score information for your tenant.
       security:
@@ -20,12 +20,26 @@ paths:
           content:
             application/json:
               schema:
-                # Direct reference to the secureScore object, removing the array wrapper.
-                $ref: '#/components/schemas/secureScore'
+                # The schema is a simple object with a depth of 1.
+                type: object
+                properties:
+                  currentScore:
+                    type: number
+                    description: The tenant's current attained secure score.
+                  maxScore:
+                    type: number
+                    description: The maximum possible score.
+                  scoreInPercentage:
+                    type: number
+                    description: The score as a percentage.
+                  lastUpdatedDateTime:
+                    type: string
+                    format: date-time
+                    description: The time the score was last updated.
         "401":
-          description: Unauthorized. The request does not have the necessary authentication credentials.
+          description: Unauthorized
         "403":
-          description: Forbidden. The authenticated user does not have the necessary permissions.
+          description: Forbidden
 components:
   securitySchemes:
     AADDelegatedAuth:
@@ -37,38 +51,3 @@ components:
           tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
           scopes:
             SecurityEvents.Read.All: "Read all security events."
-  schemas:
-    secureScore:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the secure score object. Read-only.
-        azureTenantId:
-          type: string
-          description: The GUID string for the tenant ID.
-        activeUsers:
-          type: number
-          description: The number of active users.
-        currentScore:
-          type: number
-          description: The tenant's current attained secure score.
-        maxScore:
-          type: number
-          description: The maximum possible score.
-        scoreInPercentage:
-          type: number
-          description: The score as a percentage.
-        createdDateTime:
-          type: string
-          format: date-time
-          description: The time the score was created.
-        lastUpdatedDateTime:
-          type: string
-          format: date-time
-          description: The time the score was last updated.
-        controlScores_flattened:
-          type: array
-          description: A simplified list of security control scores (e.g., 'Category: Title - Score').
-          items:
-            type: string
