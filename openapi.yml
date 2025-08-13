@@ -20,40 +20,8 @@ paths:
           content:
             application/json:
               schema:
-                # All properties are listed directly here.
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: The unique identifier for the secure score object. Read-only.
-                  azureTenantId:
-                    type: string
-                    description: The GUID string for the tenant ID.
-                  activeUsers:
-                    type: number
-                    description: The number of active users.
-                  currentScore:
-                    type: number
-                    description: The tenant's current attained secure score.
-                  maxScore:
-                    type: number
-                    description: The maximum possible score.
-                  scoreInPercentage:
-                    type: number
-                    description: The score as a percentage.
-                  createdDateTime:
-                    type: string
-                    format: date-time
-                    description: The time the score was created.
-                  lastUpdatedDateTime:
-                    type: string
-                    format: date-time
-                    description: The time the score was last updated.
-                  controlScores_flattened:
-                    type: array
-                    description: A simplified list of security control scores (e.g., 'Category: Title - Score').
-                    items:
-                      type: string
+                # Direct reference to the secureScore object, removing the array wrapper.
+                $ref: '#/components/schemas/secureScore'
         "401":
           description: Unauthorized. The request does not have the necessary authentication credentials.
         "403":
@@ -70,4 +38,37 @@ components:
           scopes:
             SecurityEvents.Read.All: "Read all security events."
   schemas:
-    # Removed the secureScore schema as it is now inlined in the path.
+    secureScore:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the secure score object. Read-only.
+        azureTenantId:
+          type: string
+          description: The GUID string for the tenant ID.
+        activeUsers:
+          type: number
+          description: The number of active users.
+        currentScore:
+          type: number
+          description: The tenant's current attained secure score.
+        maxScore:
+          type: number
+          description: The maximum possible score.
+        scoreInPercentage:
+          type: number
+          description: The score as a percentage.
+        createdDateTime:
+          type: string
+          format: date-time
+          description: The time the score was created.
+        lastUpdatedDateTime:
+          type: string
+          format: date-time
+          description: The time the score was last updated.
+        controlScores_flattened:
+          type: array
+          description: A simplified list of security control scores (e.g., 'Category: Title - Score').
+          items:
+            type: string
