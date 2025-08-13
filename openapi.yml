@@ -79,5 +79,3 @@ components:
           type: string
         rank:
           type: number
-
-
