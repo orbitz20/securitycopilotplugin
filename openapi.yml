@@ -40,16 +40,3 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
-components:
-  securitySchemes:
-    AADDelegatedAuth:
-      type: oauth2
-      description: "Microsoft Entra ID Delegated Access"
-      flows:
-        authorizationCode:
-          authorizationUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/authorize
-          tokenUrl: https://login.microsoftonline.com/c646f0a4-4a54-4072-92a7-e4c57f5e6702/oauth2/v2.0/token
-          scopes:
-            SecurityEvents.Read.All: "Read all security events."
-
-
